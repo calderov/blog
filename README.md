@@ -1,9 +1,9 @@
 # Hugo notes and commands
 
-## Start local Hugo Server
+## Start local Hugo Server (with drafts)
 From the __PersonalBlog__ folder run:
 ```
-hugo server
+hugo server -D
 ```
 Then open http://localhost:1313/ from your web browser.
 
