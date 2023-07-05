@@ -1,12 +1,12 @@
 ---
-title: "T3 Tutorial Notes"
+title: "Coding a Twitter clone with the T3 stack"
 date: 2023-06-27T11:32:48-06:00
 draft: true
 ---
 
 The T3 stack is a web development stack proposed by Theo Browne. It is a popular choice to build large scale web applications simply and quickly, taking care of bussiness logic, database handling, object validation, API schemas, authentication and UI styling. 
 
-This tutorial will guide you through the development of a Twitter clone using the T3 stack. We will cover all the steps from the installation of the tools that comprise the T3 stack, hosting the code on GitHub, setting up a database and deploying our app to the cloud!
+This tutorial will guide you through the development of a Twitter clone using the T3 stack. We will cover all the steps from the installation of the tools that comprise the T3 stack, hosting the code on GitHub, setting up a database in Planetscale and deploying our app to the cloud through Vercel!
 
 ## The tools in the T3 Stack
 Let's start by presenting the tools that comprise the T3 stack, these are:
@@ -27,7 +27,7 @@ Once it is installed, your computer will have some new commands:
 - `npm` to install JavaScript packages into Node projects.
 - `npx` to execute Javascript packages from the NPM registry without installing them.
 
-This tutorial also asumes that you, the reader have a GitHub account and are familiar with Git.
+This tutorial asumes that you, the reader have a GitHub account, are familiar with Git and have a code editor installed in your system, I personally recommend Visual Studio code.
 
 ## Getting started
 The [Create T3 App](https://create.t3.gg/) is the fastest way to get started with T3. It will help you install and configure all the tools required for your T3 application. To use it just open a console and type this command:
@@ -72,3 +72,74 @@ git push -u origin main
 ```
 
 If all of these succeeded, you should now see the changes reflected on GitHub.
+
+## Database setup
+Before we can deploy, we need a place to store our data. A great option for this is **Planetscale**, the world's most advanced serverless MySQL platform. Since this section can be a bit long let's split it in two steps:
+1. Create a database.
+2. Connect to the dabase.
+
+### Create a Planetscale MySQL database
+Let's start by opening [planetscale.com](https://planetscale.com) in a new tab and logging in through GitHub (you may need to confirm your email). Then, pick an organization name and follow the welcome caroussel until you reach the form to create your first database. In there, choose a name and a region for it, and click the **Create database** button. Your database should be ready in about a minute.
+![Planetscale's welcome caroussel](images/planetscale-new-db-wizard.gif)
+
+### Connect to our Planetscale database
+Now that we have a database you should be presented with a database dashboard, click the **Get connection strings** button (look at the bottom of the example below).
+![Planetscale database dashboard](images/planetscale-db-dashboard.png)
+
+If this is the first time press this button, you will be asked to create a password for the database. In our example we picked the name **admin-password**, the **main** branch and the **Admin** role. Click **Create password** when you are finished to continue.
+![Planetscale database password form](images/planetscale-admin-password.png)
+
+Once the password request has been processed, you will be presented with a form containing your database's connection strings. Make sure you copy and backup the **Username**, **Password** and contents of the **.env** file as they will not be persisted on Planetscale after you close the form. Also keep in mind these strings are sensitive information, so do not share them publicly
+and store them in a safe place. You can close the **Connection strings** form now.
+![Planetscale connection strings form](images/planetscale-connection-strings.png)
+
+At this point, we got our database running and the necessary parameters to connect to it. Let's try "talking" to the database from our T3 project. 
+
+Now, locate and open the **.env** file inside your T3 project and replace the line 
+```text
+DATABASE_URL="file:./db.sqlite"
+```
+with the contents of the **.env** file that you got from the **Connection strings** form on the previous section. It should look something like this:
+```text
+DATABASE_URL="mysql://<user>:<password>@aws.connect.psdb.cloud/<database>?sslaccept=strict"
+```
+This string is akin to a password to connect to Planetscale in your behalf from your local machine. Note that this will not be commited to GitHub as the **.env** file is listed in .gitignore. Regardless, handle it with care.
+
+Next, open the **schema.prisma** file (`C:\git\birdy\prisma\schema.prisma` in our example) and edit the **generator client** and **datasource db** sections to look like this:
+```text
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "mysql"
+    url      = env("DATABASE_URL")
+    relationMode = "prisma"
+}
+```
+This will let Prisma set the schema of your database. Save your changes and type this command on the console to sync the schema changes to Planetscale.
+
+```text
+npx prisma db push
+```
+
+Awesome, now your local T3 environment can talk to your MySQL database in Planetscale. Let's put it to the test! 
+
+Type the following command to open **Prisma Studio**, a handy tool to interact with your database from Prisma.
+```text
+npx prisma db push
+```
+
+This should open a browser window pointing to a local instance of **Prisma Studio** [(https://localhost:5555)](https://localhost:5555). Notice how the **Example** model is the only one listed at the moment, if you open it you will see how it matches with the schema definition at the bottom of the **schema.prisma** file; feel free to play a bit with this model in **Prisma Studio**, inserting and removing records to it.
+![Prisma studio](images/prisma-studio.png)
+Go back to your console and press `Ctrl + C` to stop the **Prisma Studio** service.
+
+Lets save our progress so far in our GitHub repo by pushing our changes into the repository by running these commands.
+
+```text
+git add prisma/schema.prisma
+git commit -m "Configure Prisma to use MySQL"
+git push
+```
+
+Now that your database is ready to serve your application. Let's move on and have it deployed.
