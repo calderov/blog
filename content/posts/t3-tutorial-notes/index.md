@@ -1,5 +1,5 @@
 ---
-title: "Coding a Twitter clone with the T3 stack"
+title: "A Twitter clone with the T3 stack (Setup and deployment)"
 date: 2023-06-27T11:32:48-06:00
 draft: true
 ---
@@ -143,3 +143,37 @@ git push
 ```
 
 Now that your database is ready to serve your application. Let's move on and have it deployed.
+
+## Initial Deployment
+Now that our code is in GitHub, and our Planetscale MySQL database is ready, let's try to deploy this barebones app to the cloud. For this matter we will use Vercel, a unified cloud platform that allows devs to easily deploy, manage and scale web applications.
+
+First, browse to [vercel.com](https://vercel.com) and sign in with your GitHub account. If this is your first time using Vercel you will be prompted with the **New Project Wizard**. Here, you can import a project from GitHub or start a new one using a template. 
+
+Let's import our Git repository by clicking the **Select a Git Namespace** dropdown and picking the Add **GitHub Account**. 
+![Vercel's new project wizard](images/vercel-new-project.png)
+
+This will raise a pop up to give Vercel permission to read our GitHub repos. Select the repo that contains your T3 project click **Install**.
+![Vercel's pick repo form](images/vercel-pick-repo.png)
+
+After Vercel finishes reading the contents of your repo it will be listed for import. Click the **Import** button on the form depicted below to proceed.
+![Vercel's import git repository form](images/vercel-import-git-repo.png)
+
+Now that your project is imported, you need to configure it to deploy correctly.
+- First, expand the **Environment Variables** tab depicted in the **Configure Project** form.
+- Then, copy and paste the **DATABASE_URL** value you got in your **.env** file (see the [previous section](#connect-to-our-planetscale-database))
+- Click the **Add** button.
+- Click the **Deploy** button.
+![Vercel's configure project form](images/vercel-configure-project.png)
+
+After a couple of minutes you will bee greeted with a successful deployment message!. Click on **Continue to Dashboard** to see more info.
+![Vercel's successful deployment message](vercel-successful-deployment.png)
+
+You have successfully deployed your app! As you can see in the dashboard, your app has been given a domain name that you can share with your users. Also, it shows that the **Production** deployment comes from the **main** branch on your Git repository, thus every time you push to that branch, a new deployment should happen automatically.
+![Vercel's deployment in dashboard](vercel-deployment-in-dashboard.png)
+
+Finally, before we end this part of the tutorial, let's touch on one more thing. As you remember from our [database creation section](#create-a-planetscale-mysql-database) we picked a region for our MySQL database in Planetscale. Thus, it would nice if our app's code was hosted in the same region, right?. Let's see how can we get this configured in Vercel.
+
+Find and click the **Settings** button in the top menu, then click on the **Functions** option. Select the region closest to that of your database and **Save** the changes. You are done, your app will move to that region the next time you deploy.
+![Vercel's region config](images/vercel-region-config.gif)
+
+That's all for now. Thanks for reading this far. See you soon in part 2!.
