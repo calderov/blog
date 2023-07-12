@@ -1,5 +1,5 @@
 ---
-title: "A Twitter clone with the T3 stack (Setup and deployment)"
+title: "A Twitter clone with the T3 stack (Part 1: Setup)"
 date: 2023-06-27T11:32:48-06:00
 draft: false
 ---
