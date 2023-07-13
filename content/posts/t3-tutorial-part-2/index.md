@@ -91,21 +91,35 @@ Then, open your browser and navigate to [https://localhost:3000](https://localho
 ## Adding a Sign Out button
 Now that our users can log into our app, lets give them a way to log out. 
 
-Open the **index.tsx** file (`C:\git\birdy\src\pages\index.tsx` in our example) and add this line to the top of the file.
+Open the **index.tsx** file (`C:\git\birdy\src\pages\index.tsx` in our example) and replace its content with this:
 ```typescript
 import { SignOutButton } from "@clerk/nextjs";
-```
-Then, paste these lines at the bottom of the page just before closing the last `div` inside the `main` section. 
-```typescript
-<div className="text-white">
-    <SignOutButton/>
-</div>
+import Head from "next/head";
+
+export default function Home() {
+  return (
+    <>
+      <Head>
+        <title>Birdy App</title>
+        <meta name="description" content="Birdy App" />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+      <main className="flex min-h-screen justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c]">
+        <div className="container flex flex-col items-center justify-center gap-12">
+          <h1 className="text-5xl font-extrabold tracking-tight text-white sm:text-[5rem]">
+            Birdy App
+          </h1>
+          <div className="text-white">
+            <SignOutButton/>
+          </div>
+        </div>
+      </main>
+    </>
+  );
+}
 ```
 
-This is how it looks in Visual Studio.
-![Clerk's sign out code](images/clerk-sign-out-code.png)
-
-Save your changes and reload the app's page in the browser. This should have put the **Sign off** button a the bottom of the page. Go ahead and click it to verify it does log you off.
+Save your changes and reload the app's page in the browser. You will see just a header and the **Sign out** button a the bottom of the page. Go ahead and click the **Sign out** button to verify it does log you off.
 ![Clerk's sign out button](images/clerk-sign-out-button.png)
 
 You can now close your app's local instance now by pressing `Ctrl + C` on the console where it is running, and save your changes to the repo with the following commands.
