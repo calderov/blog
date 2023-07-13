@@ -176,4 +176,4 @@ Finally, before we end this part of the tutorial, let's touch on one more thing.
 Find and click the **Settings** button in the top menu, then click on the **Functions** option. Select the region closest to that of your database and **Save** the changes. You are done, your app will move to that region the next time you deploy.
 ![Vercel's region config](images/vercel-region-config.gif)
 
-That's all for now. Thanks for reading this far. See you soon in part 2!.
+That's all for now. Thanks for reading this far. See you in [part two](../t3-tutorial-part-2) where we use Clerk to manage authentication.
