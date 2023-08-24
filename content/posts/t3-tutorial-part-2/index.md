@@ -1,7 +1,7 @@
 ---
 title: "A Twitter clone with the T3 stack (Part 2: Authentication)"
 date: 2023-07-12T17:34:45-06:00
-draft: false
+draft: true
 ---
 
 Welcome back to the Twitter clone tutorial with the T3 stack.

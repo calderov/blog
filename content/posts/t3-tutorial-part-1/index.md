@@ -1,7 +1,7 @@
 ---
 title: "A Twitter clone with the T3 stack (Part 1: Setup)"
 date: 2023-06-27T11:32:48-06:00
-draft: false
+draft: true
 ---
 
 The T3 stack is a web development stack proposed by Theo Browne. It is a popular choice to build large scale web applications simply and quickly, taking care of bussiness logic, database handling, object validation, API schemas, authentication and UI styling. 
